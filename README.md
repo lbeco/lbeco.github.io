@@ -1,1 +1,1 @@
- LinbcBlog.github.io
+lbeco.github.io
