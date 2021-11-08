@@ -12,5 +12,7 @@
 能攻心则反侧自消，从古知兵非好战；
 不审势即宽严皆误，后来治蜀要深思
 ```
-github链接：https://github.com/lbeco
-本站地址：https://lbeco.github.io/
+github链接：<https://github.com/lbeco>
+本站地址：<https://lbeco.github.io/>
+
+个人简历：<https://lbeco.github.io/cv>
