@@ -1,0 +1,36 @@
+操作系统五大IO：
+
+阻塞式IO模型
+非阻塞式IO模型
+IO复用模型
+信号驱动IO模型
+异步IO模型
+
+Java三大IO：
+BIO
+BIO （Blocking I/O）：同步阻塞I/O模式，数据的读取写入必须阻塞在一个线程内等待其完成。
+
+NIO：
+NIO （New I/O）：同时支持阻塞与非阻塞模式。线程轮询多个socket以确认其是否完成 非阻塞IO复用
+
+AIO：
+异步火星科技，1.7开始
+
+NIO：
+三大件：Channel Buffer Selector
+
+selector 监听channel的事件 accept connect read write
+
+零拷贝<https://zhuanlan.zhihu.com/p/258513662>
+
+
+select 
+遍历所有io，有数量限制
+
+poll
+遍历所有io，采用链表，没有数量限制
+
+epoll
+有限制，但是限制很大。
+事件提醒，同时提供零拷贝功能，内核和用户空间共享
+
