@@ -16,3 +16,7 @@ github链接：<https://github.com/lbeco>
 本站地址：<https://lbeco.github.io/>
 
 个人简历：<https://lbeco.github.io/cv>
+
+
+
+Spring Bean生命周期——张三的一生 : https://lbeco.github.io/spring-bean-life
