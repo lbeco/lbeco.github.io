@@ -7,3 +7,4 @@ Java语言的泛型采用的是擦除法实现的伪泛型，泛型信息（类�
 new ArrayList<String>().getClass(); -> new ArrayList<>();
 
 new ArrayList<String>().getClass(); -> new ArrayList<>();
+

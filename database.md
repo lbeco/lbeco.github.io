@@ -59,3 +59,9 @@ A 原子性由undo log 日志保证， 它记录了需要回滚的日志信息�
 C 一致性由其他三大特性保证、程序代码要保证业务上的一致性
 I 隔离性由MVCC 来保证
 D 持久性由内存+ redolog 来保证，mysql修改数据同时在内存和redolog 记录这次操作， 宕机的时候可以从redolog恢复
+
+
+
+
+
+索引失效：<https://www.cnblogs.com/liehen2046/p/11052666.html>
