@@ -8,6 +8,8 @@ mvcc能否解决幻读 <https://blog.csdn.net/qq_35590091/article/details/107734
 
 mvcc 在rc和rr下区别<https://blog.csdn.net/qq_35634181/article/details/113280233>
 
+RR 级别只在事务开始时生成一次，之后一直使用该 ReadView。而 RC 级别则在每次 select 时，都会生成一个 ReadView。
+
 DB_ROW_ID：行ID，随着插入新行而单调递增，如果有主键，则不会包含该列。
 
 DB_TRX_ID：记录插入或更新该行的事务的事务ID。

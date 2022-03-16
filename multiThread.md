@@ -56,3 +56,5 @@ InheritableThreadLocal
 
 总线风暴：多个volatile在总线上互相发导致带宽爆炸
 解决办法：部分volatile和cas使用synchronize
+
+伪共享 https://blog.csdn.net/z69183787/article/details/108678602

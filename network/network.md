@@ -1,14 +1,46 @@
 * **网络相关**
-tcp相关：
-拥塞控制<https://blog.csdn.net/qq_41431406/article/details/97926927>
-慢开始 拥塞避免
-快重传 快恢复（RENO版本有 tahoe没有）
-三挥四握<https://www.cnblogs.com/onesea/p/13053697.html>
-各种问题<https://blog.csdn.net/scuzoutao/article/details/81774100>
-ping <https://www.jianshu.com/p/e1795962ad76>
-http 1.0 1.1 2.0<https://blog.csdn.net/ailunlee/article/details/97831912>
-http3 <https://zhuanlan.zhihu.com/p/143464334>
-http各个code详见书
+  tcp相关：
+
+  tcp报文格式https://blog.csdn.net/paincupid/article/details/79726795
+
+  拥塞控制<https://blog.csdn.net/qq_41431406/article/details/97926927>
+
+  出现拥塞的依据：发生重传
+
+  慢开始 拥塞避免
+  快重传 快恢复（两个方法RENO版本有 tahoe没有）
+  三挥四握<https://www.cnblogs.com/onesea/p/13053697.html>
+
+  <img src="https://cooffeeli-blog.oss-cn-beijing.aliyuncs.com/TCP/established.png" alt="三次握手建立连接" style="zoom:67%;" />
+
+  
+
+  <img src="https://cooffeeli-blog.oss-cn-beijing.aliyuncs.com/TCP/close.png" alt="四次挥手关闭连接" style="zoom:67%;" />
+
+  各种问题<https://blog.csdn.net/scuzoutao/article/details/81774100>
+  ping <https://www.jianshu.com/p/e1795962ad76>
+
+  http 1.0 1.1 2.0<https://blog.csdn.net/ailunlee/article/details/97831912>
+
+  1.1相对1.0：支持长连接，在一个tcp连接上可以传送多个请求
+
+  2.0相对1.1:多路复用技术，一个连接并发处理多个请求，压缩头部数据，实现服务器推送功能
+
+  http3 <https://zhuanlan.zhihu.com/p/143464334> Quic协议基于udp，避免请求丢失导致的队头阻塞
+
+  quic解决队头阻塞 <https://zhuanlan.zhihu.com/p/32553477>
+
+  
+
+* http各个code
+
+  200 成功
+
+  301 永久重定向 302 临时重定向（重定向后请求不可预测） 307 临时重定向，不会改变请求
+
+  400 请求语法错误 401 需要权限 403 拒绝执行 404 找不到 408 timeout 414 请求过长
+
+  500 内部错误 502 504 网关问题
 
 timewait可以：
 可靠地实现TCP全双工连接的终止
@@ -26,5 +58,5 @@ csrf:
 
 防重放：<https://blog.csdn.net/weixin_39986856/article/details/82657808> 时间戳和token结合加密 
 
-quic解决队头阻塞 <https://zhuanlan.zhihu.com/p/32553477>
+
 

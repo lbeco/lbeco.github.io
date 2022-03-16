@@ -186,7 +186,5 @@ BeanFactory首先创造了beanFactoryPostProcessor，但是事实上这时候我
 
 * 注：原文https://www.cnblogs.com/zrtqsk/p/3735273.html中的InstantiationAwareBeanPostProcessorAdapter方法在5.3后被弃用，官方推荐直接继承BeanPostProcessor来进行操作。姑不考
 
-博客链接：https://lbeco.github.io/
-
 
 

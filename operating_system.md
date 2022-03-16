@@ -4,7 +4,16 @@
 linux cfs调度<https://blog.csdn.net/qq_31098037/article/details/78125893>
 tlb<https://zhuanlan.zhihu.com/p/108425561>
 
-僵尸进程 <https://www.cnblogs.com/chenjianhong/p/4144513.html>
+僵尸进程 <https://www.cnblogs.com/chenjianhong/p/4144513.html> 该文十分搞笑
+
+通知父进程该进程应当结束，或直接结束其父进程
 
 Linux进程的六种状态（R、S、D、T、Z、X） <https://blog.csdn.net/wjd_231/article/details/81432999>
+
+R --- TASK_RUNNING（可执行状态）
+S --- TASK_INTERRUPTIBLE（可中断的睡眠状态）
+D --- TASK_UNINTERRUPTIBLE（不可中断的睡眠状态）
+T --- TASK_STOPPED或TASK_TRACED（暂停状态或跟踪状态）
+Z --- TASK_DEAD - EXIT_ZOMBIE（退出状态，进程成为僵尸进程）
+X --- TASK_DEAD - EXIT_DEAD（退出状态，进程即将被销毁）
 

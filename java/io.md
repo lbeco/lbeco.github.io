@@ -14,15 +14,14 @@ NIO：
 NIO （New I/O）：同时支持阻塞与非阻塞模式。线程轮询多个socket以确认其是否完成 非阻塞IO复用
 
 AIO：
-异步火星科技，1.7开始
+异步火星科技，1.7开始，没人用
 
 NIO：
 三大件：Channel Buffer Selector
 
 selector 监听channel的事件 accept connect read write
 
-零拷贝<https://zhuanlan.zhihu.com/p/258513662>
-
+零拷贝<https://zhuanlan.zhihu.com/p/258513662> 注意大小文件的差别
 
 select 
 遍历所有io，有数量限制
