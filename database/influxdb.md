@@ -23,3 +23,5 @@ SELECT * FROM "census" WHERE "butterflies" = 1
 influxdb中文文档https://jasper-zhang1.gitbooks.io/influxdb/content/
 
 influxdb引擎https://blog.csdn.net/cymm_liu/article/details/88344215
+
+influx使用的是TSM(Time-Structured Merge Tree）存储引擎，以代替LSM

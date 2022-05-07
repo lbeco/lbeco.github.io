@@ -17,3 +17,7 @@ T --- TASK_STOPPED或TASK_TRACED（暂停状态或跟踪状态）
 Z --- TASK_DEAD - EXIT_ZOMBIE（退出状态，进程成为僵尸进程）
 X --- TASK_DEAD - EXIT_DEAD（退出状态，进程即将被销毁）
 
+
+
+伙伴算法https://blog.csdn.net/csdn_kou/article/details/82355452
+

@@ -1,18 +1,36 @@
-有序集合类型使用跳表
 
-aof rdb
+
+## redis
+
+redis持久化：
+
+aof：append only file 持久化的日志文件
+
+rdb：redis文件的快照
 
 以bg形式fork一个线程来生成
 
-string，hash，list，set，sorted set,
+
+
+数据类型：
+
+string 		key value存储string
+
+hash			存储一个kv的hashmap
+
+list 			链表 可以做栈或者队列
+
+set			集合
+
+sorted set（zset）有序集合类型使用跳表
 
 hyperloglog 基数统计
 
  bitmap 位图 可以用来做布隆过滤器
 
- GEO 地理位置 计算距离 指定范围内点等
+ GEO 地理位置 计算距离 指定范围内点等 使用geo hash进行编码
 
-分布式锁：setnx添加 需要考虑过期时间
+分布式锁：setnx（set if not exist）添加 需要考虑过期时间
 
 
 
@@ -44,13 +62,23 @@ hyperloglog 基数统计
 
 
 
-哨兵模式：监控redis集群中Master主服务器工作的状态
+哨兵模式：Sentinel节点监控redis集群中Master主服务器工作的状态
+
+主观下线：对单个redis节点的心跳没有回复
+
+客观下线：哨兵节点共同判断下线
+
+leader选举：类似raft
 
 
 
 4.0:混合持久机制
 
 6.0引入多线程
+
+
+
+redis实现分布式锁：redlock 
 
 
 
@@ -67,3 +95,15 @@ hyperloglog 基数统计
 解决：布隆过滤器，实时监控后黑名单防控 
 
 监控：prometheus cloud insight redis
+
+
+
+
+
+### redisson
+
+redisson是用java实现的redis分布式可重入锁
+
+https://segmentfault.com/a/1190000038988087
+
+防止redis单点故障，引入redlock，redlock可以保证大多数redis服务同意获取的锁，从而实现分布式

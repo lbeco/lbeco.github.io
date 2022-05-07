@@ -2,7 +2,9 @@
 
 X轴 加机器
 
-链路追踪https://www.jianshu.com/p/07cf4093536a
+### 链路追踪
+
+https://www.jianshu.com/p/07cf4093536a
 
 开山始祖Google Dapper 
 

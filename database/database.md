@@ -16,8 +16,22 @@ DB_TRX_ID：记录插入或更新该行的事务的事务ID。
 
 DB_ROLL_PTR：回滚指针，指向 undo log 记录。每次对某条记录进行改动时，该列会存一个指针，可以通过这个指针找到该记录修改前的信息 。当某条记录被多次修改时，该行记录会存在多个版本，通过DB_ROLL_PTR 链接形成一个类似版本链的概念。
 
-
 各种锁<https://www.cnblogs.com/yaochunhui/p/14186371.html>
+
+悲观锁
+		我们使用悲观锁的话其实很简单(手动加行锁就行了)：select * from xxxx for update，在select 语句后边加了for update相当于加了排它锁(写锁)，加了写锁以后，其他事务就不能对它修改了！需要等待当前事务修改完之后才可以修改.也就是说，如果操作1使用select ... for update，操作2就无法对该条记录修改了，即可避免更新丢失。
+
+乐观锁
+		乐观锁不是数据库层面上的锁，需要用户手动去加的锁。一般我们在数据库表中添加一个版本字段version来实现，例如操作1和操作2在更新User表的时，执行语句如下：
+
+```sql
+update A set Name=lisi,version=version+1 where ID=#{id} and version=#{version}，
+```
+
+
+此时即可避免更新丢失。
+
+
 
 mysql相关<https://www.cnblogs.com/xuwc/p/13873293.html>
 
@@ -64,6 +78,8 @@ D 持久性由内存+ redolog 来保证，mysql修改数据同时在内存和red
 
 
 
+索引下推：mysql在5.6之后提供了该功能。当使用索引条件下推优化时，如果存在某些被索引的列的判断条件时，MySQL服务器将这一部分判断条件传递给存储引擎，然后由存储引擎通过判断索引是否符合MySQL服务器传递的条件，只有当索引符合条件时才会将数据检索出来返回给MySQL服务器。如果没有这功能，就会把所有符合条件的结果返回，然后一个个判断
 
+https://blog.csdn.net/sinat_29774479/article/details/103470244
 
 索引失效：<https://www.cnblogs.com/liehen2046/p/11052666.html>

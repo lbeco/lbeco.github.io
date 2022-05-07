@@ -93,3 +93,24 @@ netty 的 Future 继承自 jdk 的 Future，而 Promise 又对 netty Future 进�
 - jdk Future 只能同步等待任务结束（或成功、或失败）才能得到结果
 - netty Future 可以同步等待任务结束得到结果，也可以异步方式得到结果，但**都是要等任务结束**
 - netty Promise 不仅有 netty Future 的功能，而且脱离了任务独立存在，**只作为两个线程间传递结果的容器**
+
+
+
+Netty小问题：
+
+Netty 为什么这么快： 
+
+Netty采用io多路复用非阻塞io模型，数据存储在ByteBuffer 堆外内存中，可以进行零拷贝以加快io
+
+Netty的线程模型是无锁化的，可以减少锁从而获取更好的性能。
+
+Netty的数据存在哪里：
+
+netty将数据存储在ByteBuf中，Netty 使用 reference-counting(引用计数)来判断何时可以释放 ByteBuf 或 ByteBufHolder 和其他相关资源。用完要记得释放
+
+ByteBuf默认是存储在堆外内存中
+
+
+
+
+
