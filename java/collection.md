@@ -1,10 +1,12 @@
-## Java collection
-
-![java-collection-hierarchy](../../../download_ch/java-collection-hierarchy.png)
+# Java collection
 
 
 
-#### 1.ArrayList
+<img src="C:\Users\Linbc\Desktop\CS\JavaGuide-master\docs\java\collection\images\Java-Collections.jpeg" alt="Java-Collections" style="zoom: 67%;" />
+
+### List
+
+#### ArrayList
 
 `ArrayList`继承于 **`AbstractList`** ，实现了 **`List`**, **`RandomAccess`**, **`Cloneable`**, **`java.io.Serializable`**接口。底层使用底层使用 `Object[ ]`，其容量可以动态扩容，不保证线程安全
 
@@ -14,19 +16,29 @@ ArrayList采用懒加载机制，初始化大小为10，第一次add时进行初
 
 添加大量元素前可以使用ensureCapacity方法
 
-#### 2.LinkedList
+#### LinkedList
 
 LinkedList是一个实现了List接口和Deque接口的双端链表。
 LinkedList底层的链表结构使它支持高效的插入和删除操作，另外它实现了Deque接口，使得LinkedList类也具有队列的特性;
 LinkedList不是线程安全的，如果想使LinkedList变成线程安全的，可以调用静态类Collections类中的synchronizedList方法。
 
-LinkedList可以用做deque来使用
+**LinkedList可以用做deque来使用**
 
 ```java
 Deque<Integer> s2 = new LinkedList<>();
 ```
 
-#### 3.HashMap
+#### Vector
+
+vector类似arrayList，底层也是由Object[]实现的。
+
+#### CopyOnWriteArrayList
+
+CopyOnWriteArrayList是一个线程安全，读操作时无锁的ArrayList。在put或set改变数组时，都会对底层数组进行复制。
+
+### Map
+
+#### HashMap
 
 ##### 基本结构：
 
@@ -71,3 +83,107 @@ HashMap在1.8引入红黑树，当链表长度大于阈值（默认为 8）时�
 
 <https://blog.csdn.net/Ho528528/article/details/103903998>
 
+#### HashTable
+
+hashtable是线程安全的类，每一个方法都经过synchronized修饰，性能较慢。
+
+HashMap可以使用null作为key，而Hashtable则不允许null作为key
+
+HashTable初始值为11，Hashtable扩容时是容量翻倍+1即:capacity2+1
+
+底层实现都是数组+链表结构实现
+
+#### ConcurrentHashMap
+
+  ConcurrentHashMap经典八股文，用于并发状态下的map
+
+参见 .\reference\ConcurrentHashMap源码+底层数据结构分析.md
+
+##### 1.7版本
+
+ConcurrentHashMap在1.7中采用segment做为并发的实现，segment本身就类似一个新的hash表，包含着一个hashEntry数组，但是其本身不可扩容。默认的Segment数量是16。Segment 实现了 ReentrantLock，对其进行修改时必须先获得对应的锁。
+
+##### 1.8版本
+
+ConcurrentHashMap 取消了 Segment 分段锁，采用 CAS 和 synchronized 来保证并发安全。数据结构跟 HashMap1.8 的结构类似，Node数组+链表/红黑二叉树。Java 8 在链表长度超过一定阈值（8）时将链表（寻址时间复杂度为 O(N)）转换为红黑树（寻址时间复杂度为 O(log(N))）
+
+synchronized 只锁定当前链表或红黑二叉树的首节点，这样只要 hash 不冲突，就不会产生并发，效率又提升 N 倍。
+
+
+
+**put方法**
+
+1. 根据 key 计算出 hashcode 。
+2. 判断是否需要进行初始化。
+3. 即为当前 key 定位出的 Node，如果为空表示当前位置可以写入数据，利用 CAS 尝试写入，失败则自旋保证成功。
+4. 如果当前位置的 `hashcode == MOVED == -1`,则需要进行扩容。
+5. 如果都不满足，则利用 synchronized 锁写入数据。tab中为链表或红黑树时就会使用synchronized 
+6. 如果数量大于 `TREEIFY_THRESHOLD` 则要转换为红黑树。
+
+
+
+#### LinkedHashMap
+
+继承了hashmap，在hashmap的散列结构中添加了一条双向链表，可以保持map的插入顺序。
+
+可以拿来实现lru,但是由于LinkedHashMap实现了扩容，所以不能直接实现lru
+
+若设置 accessOrder = true, 则LinkedHashMap会被设置为访问序
+
+顺序应当最前的会被放在队尾
+
+
+
+#### TreeMap
+
+treeMap以红黑树为底层，数据默认已经进行了排序。
+
+主要方法：
+
+```java
+ceilingEntry()  // 返回具有(大于或等于指定键)最小键值的键值对,可以包括自己。如果没有这样的键,则返回null
+higherEntry()   // 返回具有(大于指定键)最小键值的键值对,不可以包括自己。如果没有这样的键,则返回null
+getFloorEntry()	//较小的键值对，可以包括自己
+lowerEntry()    //较小的键值对，不包括自己
+```
+
+#### **ConcurrentSkipListMap**
+
+跳表，key有序，key和value都不可以为null。和TreeeMap类似
+
+### Queue
+
+双端口Queue的接口是Deque
+
+#### ArrayDeque
+
+ArrayDeque是 Deque的实现类
+
+#### PriorityQueue
+
+优先级队列
+
+示例：
+
+```java
+PriorityQueue<Integer> p = new PriorityQueue<>((a,b)->b-a);// 大顶堆
+PriorityQueue<Integer> p = new PriorityQueue<>((a,b)->a-b);// 小顶堆
+```
+
+可见，比较时返回结果若为真，则第二个参数会排在前面
+
+或者：
+
+```java
+Comparator<Integer> comp = new Comparator<Integer>() {
+    @Override
+    public int compare(Integer o1, Integer o2) {
+        return o1-o2;
+    }
+};
+PriorityQueue<Integer> p2 = new PriorityQueue<>(comp);
+```
+
+#### **LinkedBlockingDeque**
+
+LinkedBlockingDeque是一个由链表结构组成的双向阻塞队列，即可以从队列的两端插入和移除元素。在不能够插入元素时，它将阻塞住试图插入元素的线程；在不能够抽取元素时，它将阻塞住试图抽取的线程。支持线程安全

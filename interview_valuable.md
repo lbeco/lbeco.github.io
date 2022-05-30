@@ -10,3 +10,5 @@ volatile<https://www.zhihu.com/question/296949412/answer/2020805404>
 避免自说自话，适时停下来
 做题时多和面试官交流，不要埋头做题
 “技术融入项目并引导”
+
+经典腾讯流面试https://leetcode.cn/circle/discuss/YizRCr/

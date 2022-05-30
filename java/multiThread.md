@@ -1,6 +1,13 @@
-* **多线程**
+# Java并发编程
 
-concurrenthashmap <https://blog.csdn.net/jianghuxiaojin/article/details/52006118>
+## 线程池
+
+### 核心参数
+
+```java
+ExecutorService tp = new ThreadPoolExecutor(5,5,1000, TimeUnit.SECONDS,
+        new LinkedBlockingDeque<>());
+```
 
 一、corePoolSize 线程池核心线程大小
 线程池中会维护一个最小的线程数量，即使这些线程处理空闲状态，他们也不会被销毁，除非设置了allowCoreThreadTimeOut。这里的最小线程数量即是corePoolSize。
@@ -33,28 +40,58 @@ ThreadPoolExecutor.DiscardOldestPolicy：丢弃队列最前面的任务，然后
 ThreadPoolExecutor.CallerRunsPolicy：由调用线程（提交任务的线程）处理该任务
 
 
-synchronized
-只升不降
+
+## synchronized
+
+
 
 无锁状态：压根没人访问，无锁
 偏向锁状态：只有一个访问，没有竞争，不会释放锁
 轻量级锁状态：一旦产生竞争，则出现轻量级锁。轻量级锁通过自旋来尝试获取锁
 重量级锁状态：多次循环未果，markWord转为重量级锁。
 
+状态只升不降
+
+对象头主要包括两部分 MarkWord和Klass Pointer，而synchronized依靠MarkWord来实现
+
+![img](https://s6.51cto.com/oss/202112/25/15dd58d0348ef26c2a254795ac825dd7.png)****
+
+GC标记是标记为GC后的标志
+
+
+
+## ReentrantLock
+
+### AQS
+
+AQS 是一个用来构建锁和同步器的框架
+
+![enter image description here](D:\study\lbeco\lbeco.github.io\java\multiThread.assets\CLH.png)
+
+AQS 使用一个 int 成员变量来表示同步状态，通过内置的 FIFO 队列来完成获取资源线程的排队工作。AQS 使用 CAS 对该同步状态进行原子操作实现对其值的修改。
 
 读写锁<https://zhuanlan.zhihu.com/p/91408261>
 
-ThreadLocal<https://www.zhihu.com/question/341005993/answer/1367225682>
-每个线程都有个map，map的key弱引用ThreadLocal实体。此时threadlocal实体受线程中的强引用和map中的弱引用。
-当线程中的强引用失效，若map不是弱引用，threadlocal迟迟死不掉
-threadlocal会在get和set的时候顺手找到key为null的对象，然后干掉value防止内存泄漏。但是最建议的方法还是每次用完对其进行remove操作
-<https://blog.csdn.net/vicoqi/article/details/79743112>
+## volatile
 
-子线程获取父类：
-InheritableThreadLocal
 
 
 总线风暴：多个volatile在总线上互相发导致带宽爆炸
 解决办法：部分volatile和cas使用synchronize
 
-伪共享 https://blog.csdn.net/z69183787/article/details/108678602
+
+
+## ThreadLocal
+
+<https://www.zhihu.com/question/341005993/answer/1367225682>
+每个线程都有个map，map的key弱引用ThreadLocal实体。此时threadlocal实体受线程中的强引用和map中的弱引用。
+当线程中的强引用失效，若map不是弱引用，threadlocal迟迟没法被干掉
+threadlocal会在get和set的时候顺手找到key为null的对象，然后干掉value防止内存泄漏。但是最建议的方法还是每次用完对其进行remove操作
+
+之所以不把threadlocal实体都给设置为弱引用，因为指不定其他还在引用（todo,不靠谱）
+
+<https://blog.csdn.net/vicoqi/article/details/79743112>
+
+子线程获取父类：
+InheritableThreadLocal
+

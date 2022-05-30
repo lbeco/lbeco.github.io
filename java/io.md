@@ -8,10 +8,14 @@ IO复用模型
 
 Java三大IO：
 BIO
-BIO （Blocking I/O）：同步阻塞I/O模式，数据的读取写入必须阻塞在一个线程内等待其完成。
+BIO （Blocking I/O）：同步阻塞I/O模式，来一个请求开一个线程处理，数据的读取写入必须阻塞在一个线程内等待其完成。
 
 NIO：
 NIO （New I/O）：同时支持阻塞与非阻塞模式。线程轮询多个socket以确认其是否完成 非阻塞IO复用
+
+**Epoll Bug**
+
+空轮询问题：selector.select()莫名其妙就被响应，导致cpu疯狂轮询直接冲到99%。Netty解决方法：加个计数器， 超过N就重建selector，将原SocketChannel从旧的Selector上去除注册，重新注册到新的Selector上，并将原来的Selector关闭。
 
 AIO：
 异步火星科技，1.7开始，没人用

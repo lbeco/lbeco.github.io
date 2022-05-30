@@ -19,7 +19,7 @@
 
 如果有加@Autowired,就会搞出来一个叫做AbstractAutowireCapableBeanFactory来丢进三级缓存里面，这是为了解决循环依赖。
 
-
+ <https://zhuanlan.zhihu.com/p/382066829>
 
 
 
