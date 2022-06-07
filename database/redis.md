@@ -2,7 +2,7 @@
 
 # redis
 
-### redis持久化
+## redis持久化
 
 aof：append only file 持久化的日志文件
 
@@ -14,11 +14,90 @@ rdb：redis文件的快照
 
 ### 数据类型：
 
-string 		key value存储string
+![image-20220607233053204](D:\study\lbeco\lbeco.github.io\database\redis.assets\image-20220607233053204.png)
 
-hash			存储一个kv的hashmap
+#### **string** 		
 
-list 			链表 可以做栈或者队列 底层结构：双向链表
+key value存储string
+
+
+
+##### 操作
+
+​	set key value 设置指定key的value
+
+​	get key 获取指定key的value
+
+##### 底层结构
+
+|  编码  |                    使用场景                     |
+| :----: | :---------------------------------------------: |
+|  int   |                    整数类型                     |
+| embstr | 较小的值使用 3.2后小于44，和redisObject放在一起 |
+|  raw   |               较大的值使用 大于44               |
+
+Redis 的 string 类型底层使用的是 SDS(动态字符串) 实现的， 具体数据结构如下：
+
+```c
+struct sdshdr {
+    int len;        // 记录字符串长度
+    int free;       // 记录 buf 数组中未使用字节的数量
+    char buf[];     // 保存字符串的字节数组
+}
+```
+
+优点：可以直接获得长度，保证二进制安全
+
+#### **hash**			
+
+hash 是一个 string 类型的 field（字段） 和 value（值） 的映射表。
+
+hset key field value [field value]:  存放指定key的field和value值
+
+##### 操作
+
+
+
+##### 底层结构
+
+|   编码    |      使用场景       |
+| :-------: | :-----------------: |
+|  ziplist  |                     |
+| hashtable | 和hashmap类似的结构 |
+
+ziplist 是一个特殊双向链表，不像普通的链表使用前后指针关联在一起，它是存储在连续内存上的。整体的结构布局如下图：
+
+![在这里插入图片描述](D:\study\lbeco\lbeco.github.io\database\redis.assets\watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzUxNTA0NTQ1,size_16,color_FFFFFF,t_70#pic_center.png)
+
+五个结构：
+
+- zlbytes: 32 位无符号整型，记录 ziplist 整个结构体的占用空间大小。当然了也包括 zlbytes 本身。这个结构有个很大的用处，就是当需要修改 ziplist 时候不需要遍历即可知道其本身的大小。 这个 SDS 中记录字符串的长度有相似之处，这些好的设计往往在平时的开发中可以采纳一下。
+- zltail: 32 位无符号整型, 记录整个 ziplist 中最后一个 entry 的偏移量。所以在尾部进行 POP 操作时候不需要先遍历一次。
+- zllen: 16 位无符号整型, 记录 entry 的数量， 所以只能表示 2^16。但是 Redis 作了特殊的处理：当实体数超过 2^16 ,该值被固定为 2^16 - 1。 所以这种时候要知道所有实体的数量就必须要遍历整个结构了。
+- entry: 真正存数据的结构。
+- zlend: 8 位无符号整型, 固定为 255 。为 ziplist 的结束标识。
+
+每个 entry 都包含两条信息的元数据为前缀。 
+
+- 第一元数据用来存储前一个 entry 的长度，以便能够从后向前遍历列表。
+- 第二元数据是表示 entry 的编码形式。 用来表示 entry 类型，整数或字符串，在字符串的情况下，它还表示字符串有效的长度。
+
+#### **list**
+
+链表 可以做栈或者队列 
+
+##### 底层结构
+
+redis list数据结构底层采用压缩列表ziplist或linkedlist两种数据结构进行存储，当创建新的列表键时， 默认以ziplist进行存储，在不满足ziplist的存储要求后转换为linkedlist列表。
+
+**ziplist**
+
+ziplist进行存储时列表的条件：
+
+- 列表对象保存的所有字符串元素的长度小于64字节
+- 列表对象保存的元素数量小于512个。
+
+ziplist没有维护双向指针:prev next；而是存储**上一个 entry的长度**和**当前entry的长度**，通过长度推算下一个元素在什么地方。牺牲读取的性能，获得高效的存储空间，因为(简短字符串的情况)存储指针比存储entry长度 更费内存。这是典型的"时间换空间"。
 
 set			集合
 
@@ -135,6 +214,24 @@ Redis6.0 引入多线程主要是为了提高网络 IO 读写性能
 
 监控：prometheus cloud insight redis
 
+## redis分片
+
+#### 哈希槽
+
+Redis 集群中内置了 16384 个哈希槽，当需要在 Redis 集群中放置一个 key-value时，redis 先对 key 使用 crc16 算法算出一个结果，然后把结果对 16384 求余数，这样每个 key 都会对应一个编号在 0-16383 之间的哈希槽，redis 会根据节点数量大致均等的将哈希槽映射到不同的节点。
+
+#### 一致性hash
+
+<img src="https://img-blog.csdnimg.cn/0059405a45674e1899e88826c11139f4.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5Y-r5oiR5ouW6Z6L5ZOl,size_20,color_FFFFFF,t_70,g_se,x_16" alt="img" style="zoom:33%;" />
+
+简单的说，就是把hash环上的请求分配给顺时针下一个服务器。
+
+**hash偏s斜** 多个服务在hash环上靠近，导致请求分配不均匀
+
+所以我们引入了虚拟节点的概念，以A节点为例，虚拟构造出(A0,A1,A2....AN)，只要是落在这些虚拟节点上的数据，都存入A节点。读取时也相同，顺时针获取的是A0虚拟节点，就到A节点上获取数据，这样就能解决数据分布不均的问题。
+
+![img](D:\study\lbeco\lbeco.github.io\database\redis.assets\watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5Y-r5oiR5ouW6Z6L5ZOl,size_20,color_FFFFFF,t_70,g_se,x_16-16546208305194.png)
+
 
 
 ## redis分布式锁
@@ -155,7 +252,9 @@ https://segmentfault.com/a/1190000038988087
 
 ### RedLock
 
-redlock不需要节点之间的复制，，假设有5个redis节点，客户端取锁流程会变成这样：
+redlock主要就是向所有服务器发送锁请求，过半就生效
+
+redlock不需要节点之间的复制，假设有5个redis节点，客户端取锁流程会变成这样：
 
 - 以毫秒为单位获取当前的服务器时间
 - 尝试使用相同的key和随机值来获取锁，客户端对每一个机器获取锁时都应该有一个超时时间，比如锁的过期时间为10s，那么获取单个节点锁的超时时间就应该为5到50毫秒左右，这样做的目的是为了保证客户端与故障的机器连接不耗费多余的时间！超时间时间内未获取数据就放弃该节点，从而去下一个Redis节点获取。

@@ -54,6 +54,8 @@ Consumer：消费者
 
 
 
+### 数据存储
+
 Topic队列中的数据存储模式：
 
 CommitLog：消息存储主体 大小固定 

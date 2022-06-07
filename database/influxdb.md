@@ -1,4 +1,6 @@
-influxdb
+# influxdb
+
+## 基础结构
 
 measurement相当于表名
 
@@ -10,13 +12,23 @@ field key：不可索引的信息，必须要有
 
 tag key：可索引的信息
 
+![image-20220604192232296](D:\study\lbeco\lbeco.github.io\database\influxdb.assets\image-20220604192232296.png)
+
+
+
 命令举例：
 
 ```sql
 SELECT * FROM "census" WHERE "butterflies" = 1
 ```
 
-优先考虑create和read数据的性能而不是update和delete
+
+
+## 设计原理
+
+优先考虑create和read数据的性能而不是update和delete。
+
+在一开始，influxdb使用的是LSM树，LSM树能让我们进行顺序写磁盘，从而大幅提升写操作，作为代价的是牺牲了一些读性能。
 
 
 

@@ -20,6 +20,8 @@ DB_ROLL_PTR：回滚指针，指向 undo log 记录。每次对某条记录进�
 
 各种锁<https://www.cnblogs.com/yaochunhui/p/14186371.html>
 
+### 悲观锁乐观锁
+
 悲观锁
 		我们使用悲观锁的话其实很简单(手动加行锁就行了)：select * from xxxx for update，在select 语句后边加了for update相当于加了排它锁(写锁)，加了写锁以后，其他事务就不能对它修改了！需要等待当前事务修改完之后才可以修改.也就是说，如果操作1使用select ... for update，操作2就无法对该条记录修改了，即可避免更新丢失。
 
@@ -47,6 +49,8 @@ mysql相关<https://www.cnblogs.com/xuwc/p/13873293.html>
 MySQL InnoDB的可重复读并不保证避免幻读，需要应用使用加锁读来保证。而这个加锁度使用到的机制就是next-key locks。
 
 在mysql中，提供了两种事务隔离技术，第一个是mvcc，第二个是next-key技术。这个在使用不同的语句的时候可以动态选择。不加lock inshare mode for...update之类的快照读就使用mvcc。否则 当前读使用next-key。mvcc的优势是不加锁，并发性高。缺点是不是实时数据。next-key的优势是获取实时数据，但是需要加锁。
+
+但是幻读还是解决不掉。如果一个读是当前读一个读是快照读，则还是会出现幻读的情况。
 
 另外，重要：
 

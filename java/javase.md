@@ -1,6 +1,6 @@
 # Java杂项
 
-### switch
+## switch
 
 不管是char,short,byte类型都是转化为int之后走的判断。
 而long ,float,double转换为int都会丢失进度，boolean无法转换为int,
@@ -9,7 +9,7 @@
 
 类变量 成员变量 局部变量
 
-### fail fast 和 fail-safe
+## fail fast 和 fail-safe
 
  https://hollischuang.github.io/toBeTopJavaer/#/basics/java-basic/fail-fast-vs-fail-safe
 
@@ -17,7 +17,7 @@ Java的集合类中运用了fail-fast机制进行设计。如果在foreach 循�
 
 CopyOnWriteArrayList等集合类实现了fail-safe
 
-### 泛型
+## 泛型
 
 <https://blog.csdn.net/u014674862/article/details/105676880>
 
@@ -29,3 +29,4 @@ Java语言的泛型采用的是擦除法实现的伪泛型，泛型信息（类�
 
 new ArrayList<String>().getClass(); -> new ArrayList<>();
 
+## SPI

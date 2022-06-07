@@ -95,12 +95,20 @@ timewait可以：
 
 短连接表示“业务处理+传输数据的时间 远远小于 TIMEWAIT超时的时间”的连接，过多短链接使得系统的连接资源不足
 timewait相关<https://www.cnblogs.com/dadonggg/p/8778318.html>
-处理TIMEWAIT：修改配置
+
+**处理TIMEWAIT**
+
+修改配置，增大backlog
+
 打开系统的TIMEWAIT重用和快速回收,增大队列
 
 大量处于close_wait：程序写出问题或者太忙，终止请求的接收方不发fin
 
+**处理sync攻击**
 
+sync攻击指的是大量发送连接请求，然后不回复。
+
+解决方法：使用硬路由进行控制，加大backlog队列长度
 
 ## UDP
 
@@ -162,7 +170,11 @@ xss攻击：在目标网站html中插东西
 - 数据链路层：各种逻辑传输协议 ARP
 - 网络层： 控制子网运行及路由选择等 ICMP IP
 - 传输层：切分数据 TCP/IP
-- 应用层： 各种应用 FTP HTTP
+- 应用层： 
+  - 会话层：建立会话 SSL TLS
+  - 表示层：加解密加解压
+  - 应用层：HTTP FTP SMTP
+
 
 
 
