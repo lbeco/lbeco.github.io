@@ -38,5 +38,5 @@ Dubbo3 提供了 Triple(Dubbo3)、Dubbo2 协议，这是 Dubbo 框架的原生�
 
 ## 服务发现
 
-dubbo使用注册中心来实现服务发现，支持的注册中心有zookeeper，Redis等。默认推荐的就是zookeeper
+dubbo使用注册中心来实现服务发现，支持的注册中心有zookeeper，Redis等。默认推荐的就是zookeeper。
 

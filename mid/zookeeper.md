@@ -39,5 +39,8 @@ zxid是zookeeper事务的标识id
 
 和nacos的算法的差别：nacos保证ap，始终可用。
 
+## 监听
 
+![img](https://img-blog.csdnimg.cn/3adf6d2686a24f3a9fe3ea158adba96b.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAWl9ISEhIX1o=,size_20,color_FFFFFF,t_70,g_se,x_16)
 
+客户端首先将 Watcher注册到服务端，同时将 Watcher对象保存到客户端的watch管理器中。当Zookeeper服务端监听的数据状态发生变化时，服务端会主动通知客户端，接着客户端的 Watch管理器会触发相关 Watcher事件来回调相应处理逻辑，从而完成整体的数据 发布/订阅流程。

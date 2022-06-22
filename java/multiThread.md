@@ -1,52 +1,5 @@
 # Java并发编程
 
-## 线程池
-
-### 核心参数
-
-```java
-ExecutorService tp = new ThreadPoolExecutor(5,5,1000, TimeUnit.SECONDS,
-        new LinkedBlockingDeque<>());
-```
-
-一、corePoolSize 线程池核心线程大小
-线程池中会维护一个最小的线程数量，即使这些线程处理空闲状态，他们也不会被销毁，除非设置了allowCoreThreadTimeOut。这里的最小线程数量即是corePoolSize。
-
-二、maximumPoolSize 线程池最大线程数量
-一个任务被提交到线程池以后，首先会找有没有空闲存活线程，如果有则直接将任务交给这个空闲线程来执行，如果没有则会缓存到工作队列（后面会介绍）中，如果工作队列满了，才会创建一个新线程，然后从工作队列的头部取出一个任务交由新线程来处理，而将刚提交的任务放入工作队列尾部。线程池不会无限制的去创建新线程，它会有一个最大线程数量的限制，这个数量即由maximunPoolSize指定。
-
-三、keepAliveTime 空闲线程存活时间
-一个线程如果处于空闲状态，并且当前的线程数量大于corePoolSize，那么在指定时间后，这个空闲线程会被销毁，这里的指定时间由keepAliveTime来设定
-
-四、unit 空闲线程存活时间单位
-keepAliveTime的计量单位
-
-五、workQueue 工作队列
-新任务被提交后，会先进入到此工作队列中，任务调度时再从队列中取出任务。jdk中提供了四种工作队列：
-
-​	1、ArrayBlockingQueue
-​	是一个基于数组结构的有界阻塞队列，此队列按 FIFO（先进先出）原则对元素进行排序。该队列有限大
-
-​	2、LinkedBlockingQueue
-​	一个基于链表结构的阻塞队列，此队列按FIFO （先进先出） 排序元素，吞吐量通常要高于ArrayBlockingQueue。静态工厂方法Executors.newFixedThreadPool()使用了这个队列。**该队列无限大**
-
-​	3、SynchronousQueue
-​	一个**不存储元素**的阻塞队列。每个插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状	态，吞吐量通常要高于LinkedBlockingQueue，静态工厂方法Executors.newCachedThreadPool（5）使用了	这个队列。
-
-​	4、PriorityBlockingQueue
-​	一个具有优先级的**无限**阻塞队列。
-
-六、threadFactory 线程工厂
-创建一个新线程时使用的工厂，可以用来设定线程名、是否为daemon线程等等
-
-七、handler 拒绝策略
-当工作队列中的任务已到达最大限制，并且线程池中的线程数量也达到最大限制，这时如果有新任务提交进来，该如何处理呢。这里的拒绝策略，就是解决这个问题的，jdk中提供了4中拒绝策略：
-
-- ThreadPoolExecutor.AbortPolicy:丢弃任务并抛出RejectedExecutionException异常。 **（默认）**
-- ThreadPoolExecutor.DiscardPolicy：丢弃任务，但是不抛出异常。 
-- ThreadPoolExecutor.DiscardOldestPolicy：丢弃队列最前面的任务，然后重新提交被拒绝的任务
-- ThreadPoolExecutor.CallerRunsPolicy：由调用线程（提交任务的线程）处理该任务
-
 
 
 ## synchronized
@@ -124,6 +77,25 @@ AQS默认使用的就是非公平锁。线程进入后会首先尝试获取锁�
 
 
 AQS 定义两种资源共享方式，一种是shared一种不是。CountDownLatch，Semaphore和ReentrantReadWriteLock的Sync实现了tryAcquireShared
+
+
+
+### Condition
+
+Condition是AQS中基于排斥锁的另一应用，其await和sign，signAll方法可以用于替代Object的wait和notify，notifyAll方法。
+具体实现类是AbstractQueuedSynchronizer的内部类ConditionObject。
+
+https://www.cnblogs.com/gunduzi/p/13614429.html
+
+![img](https://img2020.cnblogs.com/blog/1407685/202009/1407685-20200904144323653-1468231329.png)
+
+对于lock来说，我们可以新建多个condition：
+
+```java
+final Condition condition = lock.newCondition();
+```
+
+当waiter获取到condition后，进入aqs的等待队列继续排队。
 
 ### ReentrantLock
 
@@ -247,9 +219,23 @@ threadlocal会在get和set的时候顺手找到key为null的对象，然后干�
 子线程获取父类：
 InheritableThreadLocal
 
-
+### 
 
 ## 进程状态
 
 
+
+**1. 新建状态(New):** 线程对象被创建后，就进入了新建状态。例如，Thread thread = new Thread()。
+
+**2. 就绪状态(Runnable):** 也被称为“可执行状态”。线程对象被创建后，其它线程调用了该对象的start()方法，从而来启动该线程。例如，thread.start()。处于就绪状态的线程，随时可能被CPU调度执行。
+
+**3. 运行状态(Running):** 线程获取CPU权限进行执行。需要注意的是，线程只能从就绪状态进入到运行状态。
+
+**4. 阻塞状态(Blocked):** 阻塞状态是线程因为某种原因放弃CPU使用权，暂时停止运行。直到线程进入就绪状态，才有机会转到运行状态。阻塞的情况分三种：
+
+- (01) 等待阻塞 -- 通过调用线程的wait()方法，让线程等待某工作的完成。
+- (02) 同步阻塞 -- 线程在获取synchronized同步锁失败(因为锁被其它线程所占用)，它会进入同步阻塞状态。
+- (03) 其他阻塞 -- 通过调用线程的sleep()或join()或发出了I/O请求时，线程会进入到阻塞状态。当sleep()状态超时、join()等待线程终止或者超时、或者I/O处理完毕时，线程重新转入就绪状态。
+
+**5. 死亡状态(Dead):** 线程执行完了或者因异常退出了run()方法，该线程结束生命周期。
 

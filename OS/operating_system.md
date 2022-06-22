@@ -154,10 +154,15 @@ epoll修改主动轮询为被动通知，主程序可以做其他事情，复杂
 触发模式分为**EPOLLLT**和**EPOLLET**两种：
 
 - LT，默认的模式（水平触发） 只要该fd还有数据可读，每次 `epoll_wait` 都会返回它的事件，提醒用户程序去操作，直到缓冲区为空；（有数据会连续触发）缺点：性能消耗大
-
 - ET是“高速”模式（边缘触发）只有所监听的事件状态改变或者有事件发生时，epoll_wait才会被触发；（有数据只触发一次）缺点：需要程序逻辑保证数据完整
 
-  
+epoll_wait:
+
+```c
+int epoll_wait（int epfd，struct epoll_event * events， int maxevents，int timeout）;
+```
+
+timeout是最短的返回间隔时间。
 
 优点：没有最大连接数量的限制，效率提升，只关心活跃的连接。利用mmap文件映射来加速与内核空间的消息传递
 

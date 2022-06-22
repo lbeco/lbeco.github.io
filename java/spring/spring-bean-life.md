@@ -15,9 +15,29 @@ Spring Bean生命周期的研究：
 
 面试被问到了spring生命周期，然后果不其然地啥也不会。这里做一个简单的研究。首先是总的流程图：
 
-![img](/181453414212066-16364637643662.png)
+![img](https://images0.cnblogs.com/i/580631/201405/181453414212066.png)
 
-![img](/181454040628981.png)
+![img](https://images0.cnblogs.com/i/580631/201405/181454040628981.png)
+
+主要步骤：
+
+- Spring在启动的时候需要「扫描」在XML/注解/JavaConfig 中需要被Spring管理的Bean信息
+- 接着会遍历这个beanDefinitionMap，执行BeanFactoryPostProcessor这个Bean工厂后置处理器的逻辑
+- 把对象给创建出来
+- 为对象注入属性
+- 进行aware操作
+- BeanPostProcessor执行before
+- 进行init_method操作
+- BeanPostProcessor执行after
+
+
+
+AOP是以一个
+InstantiationAwareBeanPostProcessor类型的BeanPostProcessor,参与到Bean的创建逻辑中，并根据是否需要代理当前Bean，决定是否创建代理对象。
+
+
+
+https://mp.weixin.qq.com/s?__biz=MzU4NzA3MTc5Mg==&mid=2247485728&idx=1&sn=993d9818beda545fc7228a22b74ffb38&scene=21#wechat_redirect
 
 好了，就把这个一字不差地背下来，相信面试官都会为你的牛逼鼓掌，本篇文章到此结束。
 
