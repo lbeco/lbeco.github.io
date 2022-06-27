@@ -98,17 +98,27 @@ timewait相关<https://www.cnblogs.com/dadonggg/p/8778318.html>
 
 **处理TIMEWAIT**
 
-修改配置，增大backlog
+修改配置，增大backlog队列
 
-打开系统的TIMEWAIT重用和快速回收,增大队列
+打开系统的TIMEWAIT重用和快速回收
 
-大量处于close_wait：程序写出问题或者太忙，终止请求的接收方不发fin
+backlog是用于保存TCP连接的队列，分为未连接和已建立连接两个队列。
+
+http://imhuchao.com/800.html
+
+**处理大量连接处于close_wait**
+
+程序写出问题或者太忙，终止请求的接收方不发fin，debug即可
 
 **处理sync攻击**
 
 sync攻击指的是大量发送连接请求，然后不回复。
 
 解决方法：使用硬路由进行控制，加大backlog队列长度
+
+**DDos**
+
+增多静态资源，做好拦截，限定协议。
 
 ## UDP
 
@@ -165,6 +175,16 @@ quic解决队头阻塞 <https://zhuanlan.zhihu.com/p/32553477>
 
 解决：时间戳和token结合加密 
 
+### 跨域请求
+
+一个页面：
+
+- 无法读取非同源网页的 Cookie、LocalStorage 和 IndexedDB
+- 无法接触非同源网页的 DOM
+- 无法向非同源地址发送 AJAX 请求（可以发送，但浏览器会拒绝接受响应）
+
+所以在A网站中想要给B网站发请求就会被跨域阻挡，但是直接Post没问题
+
 ### 中间人攻击
 
 攻击者与通讯的两端分别创建独立的联系，并交换其所收到的数据，使通讯的两端认为他们正在通过一个私密的连接与对方直接对话，但事实上整个会话都被攻击者完全控制。在中间人攻击中，攻击者可以拦截通讯双方的通话并插入新的内容。
@@ -196,3 +216,11 @@ quic解决队头阻塞 <https://zhuanlan.zhihu.com/p/32553477>
 
 
  ping使用的是icmp协议，处于网络层 <https://www.jianshu.com/p/e1795962ad76>
+
+## 经典问题
+
+**输入url到看到网页发生了什么**
+
+属实是经典永流传
+
+https://www.zhihu.com/question/34873227/answer/1657140394

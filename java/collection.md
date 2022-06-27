@@ -140,7 +140,9 @@ synchronized 只锁定当前链表或红黑二叉树的首节点，这样只要 
 
 **计数机制**
 
-为了能够记录ConcurrentHashMap中的key-value个数，ConcurrentHashMap在它的内部实现了一个类似于LongAdder的高性能计数器。**TODO**
+为了能够记录ConcurrentHashMap中的key-value个数，ConcurrentHashMap在它的内部实现了一个类似于LongAdder的高性能计数器。利用的是sumCount()方法来进行计算。sumCount是baseCount加上counterCells。
+
+当进行添加的时候，使用fullAddCount()函数。其会首先试图cas相应的counterCells，加不上去再试图cas加baseCount
 
 #### LinkedHashMap
 

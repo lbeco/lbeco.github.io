@@ -35,7 +35,7 @@ zxid是zookeeper事务的标识id
 
 选举时无法提供服务，故实现的是CP
 
-和raft算法的差别：直接选主选就完了，不需要像raft一样判断谁的log比较新。
+和raft算法的差别：会pk谁zid大，一样则比较myid，然后选出过半。由于这一过程和log无关，所以需要状态同步。
 
 和nacos的算法的差别：nacos保证ap，始终可用。
 

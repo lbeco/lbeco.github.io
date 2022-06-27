@@ -28,12 +28,27 @@ Spring Bean生命周期的研究：
 - 进行aware操作
 - BeanPostProcessor执行before
 - 进行init_method操作
-- BeanPostProcessor执行after
+- BeanPostProcessor执行after，AOP一般在这里
 
-
+## AOP
 
 AOP是以一个
 InstantiationAwareBeanPostProcessor类型的BeanPostProcessor,参与到Bean的创建逻辑中，并根据是否需要代理当前Bean，决定是否创建代理对象。
+
+如果有循环依赖：
+
+那么关于AOP代理的BeanPostProcessor是在getEarlyBeanReference发生的：
+
+SmartInstantiationAwareBeanPostProcessor # getEarlyBeanReference
+
+获取一个拓展（进行了代理或其他）的半成品的对象。
+
+如果没有循环依赖：
+
+没有循环依赖的话，AOP就是发生在applyBeanPostProcessorsAfterInitialization的
+
+BeanPostProcessor # postProcessAfterInitialization.
+
 
 
 

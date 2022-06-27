@@ -37,8 +37,20 @@ arthas
 
 **内存不足：**
 
+jmap查看占用
+
 jstat查看gc
 
 jstack查看线程堆栈，判断是否死锁
 
 问题较大，则进行内存dump
+
+**死锁**
+
+`jps -l` 用来查看当前运行的进程号
+
+再使用`jstack 进程号`命令查看当前进程的[堆栈](https://so.csdn.net/so/search?q=堆栈&spm=1001.2101.3001.7020)信息
+
+## arthas
+
+todo

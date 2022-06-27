@@ -97,6 +97,8 @@ final Condition condition = lock.newCondition();
 
 当waiter获取到condition后，进入aqs的等待队列继续排队。
 
+使用方法和synchronize的wait/notify类似。
+
 ### ReentrantLock
 
 ReentrantLock是可重入锁，会记录使用锁的thread.每进行一次lock,state加一
@@ -107,9 +109,22 @@ ReentrantLock是可重入锁，会记录使用锁的thread.每进行一次lock,s
 
 使用AQS同步状态来保存信号量的当前计数。初始化的permit会存储在state里面。state为0时则线程等待
 
+```java
+acquire()  
+获取一个令牌，在获取到令牌、或者被其他线程调用中断之前线程一直处于阻塞状态。
+acquireUninterruptibly() 
+获取一个令牌，在获取到令牌之前线程一直处于阻塞状态（忽略中断）。
+tryAcquire()
+尝试获得令牌，返回获取令牌成功或失败，不阻塞线程。
+tryAcquire(long timeout, TimeUnit unit)
+尝试获得令牌，在超时时间内循环尝试获取，直到尝试获取成功或超时返回，不阻塞线程。
+release()
+释放一个令牌，唤醒一个获取令牌不成功的阻塞线程。
+```
+
 ### CyclicBarrier
 
-可重复使用的栅栏
+**可重复使用**的栅栏
 
 维持两个计数器：count和parties。count是当前减掉的数，parties是设置的标志数。
 
@@ -219,7 +234,7 @@ threadlocal会在get和set的时候顺手找到key为null的对象，然后干�
 子线程获取父类：
 InheritableThreadLocal
 
-### 
+
 
 ## 进程状态
 

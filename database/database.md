@@ -6,7 +6,13 @@ mysql<https://www.cxyxiaowu.com/16302.html>
 
 ![v2-82fe912d213bd32cb01a869353ad0557_r](https://i.imgur.com/asHB2dx.jpg)
 
+连接器 管理连接和权限校验，查询缓存
 
+分析器 语法词法分析与便于
+
+优化器 生成执行计划
+
+执行器 进行执行
 
 ## 事务
 
@@ -18,7 +24,7 @@ DB_ROW_ID：行ID，随着插入新行而单调递增，如果有主键，则不
 
 DB_TRX_ID：记录插入或更新该行的事务的事务ID。
 
-DB_ROLL_PTR：回滚指针，指向 undo log 记录。每次对某条记录进行改动时，该列会存一个指针，可以通过这个指针找到该记录修改前的信息 。当某条记录被多次修改时，该行记录会存在多个版本，通过DB_ROLL_PTR 链接形成一个类似版本链的概念。
+DB_ROLL_PTR：回滚指针，指向 undo log 记录。每次对某条记录进行改动时，该列会存一个指针，可以通过这个指针找到该记录修改前的信息 。当某条记录被多次修改时，该行记录会存在多个版本，通过DB_ROLL_PTR 链接形成一个类似版本链的概念。undolog也有这个指针，所以会形成版本链。
 
 各种锁<https://www.cnblogs.com/yaochunhui/p/14186371.html>
 
@@ -89,10 +95,10 @@ mysql相关<https://www.cnblogs.com/xuwc/p/13873293.html>
 ## ACID
 
 ACID 靠什么保证的？
-A 原子性由undo log 日志保证， 它记录了需要回滚的日志信息， 事务回滚时撤消已经执行成功的sql
+A 原子性由**undo log** 日志保证， 它记录了需要回滚的日志信息， 事务回滚时撤消已经执行成功的sql
 C 一致性由其他三大特性保证、程序代码要保证业务上的一致性
 I 隔离性由MVCC 来保证
-D 持久性由内存+ redolog 来保证，mysql修改数据同时在内存和redolog 记录这次操作， 宕机的时候可以从redolog恢复（durability）
+D 持久性由内存+ **redolog** 来保证，mysql修改数据同时在内存和redolog 记录这次操作， 宕机的时候可以从redolog恢复（durability）
 
 ## 索引下推
 
