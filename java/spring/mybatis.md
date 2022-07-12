@@ -1,3 +1,5 @@
+
+
 # Mybatis
 
 **#{}是参数占位符** 
@@ -35,3 +37,11 @@ mybatis中二级缓存是mapper级别的缓存，默认是关闭的。
 ## 映射
 
 todo
+
+
+
+## 代理
+
+
+
+![image-20220705213559194](D:\study\lbeco\lbeco.github.io\java\spring\mybatis.assets\image-20220705213559194.png)

@@ -5,6 +5,9 @@
 • 引用与指针区别
 • C 和 C++ 的一些区别，比如 new、delete 和 malloc、free 的区别
 • 虚机制：虚函数、虚函数表、纯虚函数
+
+https://blog.csdn.net/daaikuaichuan/article/details/88364336
+
 • 继承、虚继承、菱形继承等
 • 多态：动态绑定，静态多态
 • 重写、重载

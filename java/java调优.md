@@ -9,7 +9,7 @@ jstack
 查看线程堆栈 用于排查线程是否死锁，查看内存使用情况
 
 jmap
-获得stack dump文件
+显示java内存信息，获得stack dump文件
 
 jhat
 导出dump文件的情况，启动一个服务器查看
@@ -39,7 +39,7 @@ arthas
 
 jmap查看占用
 
-jstat查看gc
+jstat -gc 查看gc的情况
 
 jstack查看线程堆栈，判断是否死锁
 
