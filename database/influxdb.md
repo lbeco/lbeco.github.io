@@ -26,7 +26,11 @@ SELECT * FROM "census" WHERE "butterflies" = 1
 
 ## 设计原理
 
-优先考虑**create**和**read**数据的性能而不是update和delete。
+https://zhuanlan.zhihu.com/p/415799237
+
+优：增、删、改操作飞快，写吞吐量极大。
+
+缺：读操作性能相对被弱化；不擅长区间范围的读操作； 归并操作较耗费资源。
 
 在一开始，influxdb使用的是LSM树，LSM树能让我们进行顺序写磁盘，从而大幅提升写操作，作为代价的是牺牲了一些读性能。
 
